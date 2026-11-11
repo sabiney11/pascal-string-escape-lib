@@ -21,3 +21,10 @@ Classic Pascal (and Delphi) spell string-internal characters with `#<decimal>`, 
 ## Edge case you will hit
 
 `decode` expects the *interior* of the literal — the bytes between the surrounding single quotes — not the quotes themselves. A lone `'` inside the input is an error, because in Pascal's own grammar a single `'` only appears as the first of a doubled pair. If your extractor gives you the full quoted literal, strip the outermost quotes before calling this.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
